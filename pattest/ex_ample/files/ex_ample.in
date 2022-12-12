@@ -1,0 +1,56 @@
+#!/bin/sh
+
+# $FreeBSD$
+#
+# PROVIDE: ex_ample
+# REQUIRE: DAEMON
+# KEYWORD: shutdown
+#
+# Add these lines to /etc/rc.conf or /etc/rc.conf.local
+# to enable this service:
+#
+# ex_ample_enable (bool):   Set to NO by default.
+#      Set it to YES to enable ex_ample.
+# ex_ample_env_file (path): Set to %%PREFIX%%/etc/ex_ample/ex_ample.env by default
+
+. /etc/rc.subr
+
+name=ex_ample
+rcvar=ex_ample_enable
+
+load_rc_config $name
+
+: ${ex_ample_enable:="NO"}
+: ${ex_ample_env_file:="%%PREFIX%%/etc/ex_ample/ex_ample.env"}
+
+pidfile="/var/run/ex_ample.pid"
+procname="%%PREFIX%%/libexec/ex_ample/erts-12.3.2.6/bin/beam.smp"
+logfile="/var/log/ex_ample.log"
+
+command="%%PREFIX%%/libexec/ex_ample/bin/ex_ample"
+extra_commands="remote"
+start_cmd=ex_ample_start
+remote_cmd=ex_ample_remote
+
+ex_ample_start()
+{
+    : ${RELEASE_TMP:=/var/run/ex_ample}
+    export RELEASE_TMP
+    : ${ERL_CRASH_DUMP:=${RELEASE_TMP}/ex_ample_erl_crash.dump}
+    export ERL_CRASH_DUMP
+
+    if [ ! -d "${RELEASE_TMP}" ]; then
+	mkdir $RELEASE_TMP
+	chmod 740 $RELEASE_TMP
+    fi
+
+    daemon -t ex_ample -p $pidfile -f -H -o $logfile $command start
+}
+
+ex_ample_remote()
+{
+    export TERM=xterm
+    $command remote
+}
+
+run_rc_command "$@"
