@@ -24,7 +24,7 @@ load_rc_config $name
 : ${ex_ample_env_file:="%%PREFIX%%/etc/ex_ample/ex_ample.env"}
 
 pidfile="/var/run/ex_ample.pid"
-procname="%%PREFIX%%/libexec/ex_ample/erts-12.3.2.6/bin/beam.smp"
+procname="%%PREFIX%%/libexec/ex_ample/%%ERTS_BEAM_SMP%%"
 logfile="/var/log/ex_ample.log"
 
 command="%%PREFIX%%/libexec/ex_ample/bin/ex_ample"

@@ -22,6 +22,8 @@ MIX_ENV?= prod
 
 USE_RC_SUBR= ex_ample
 SUB_FILES= ex_ample.env.sample
+SUB_LIST= ERTS_BEAM_SMP=${ERTS_BEAM_SMP:sh}
+ERTS_BEAM_SMP= cd ${LOCALBASE}/lib/erlang${ERLANG_VER} && find erts-*/bin/beam.smp
 PLIST_FILES= "@sample(,,0600) etc/ex_ample/ex_ample.env.sample"
 PLIST_DIRS= etc/ex_ample
 
